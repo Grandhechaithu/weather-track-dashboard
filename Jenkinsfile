@@ -11,24 +11,22 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('climatrack-dashboard')
+                    def app = docker.build('climatrack-dashboard')
                 }
             }
         }
 
         stage('Deploy') {
             steps {
+                echo "Deploying the Docker container..."
                 script {
-                    docker.image('climatrack-dashboard').run('-p 8089:80')
+                    docker.image('climatrack-dashboard').run('-d -p 8080:80')
                 }
             }
         }
     }
 
     post {
-        success {
-            echo 'Deployment successful!'
-        }
         failure {
             echo 'Deployment failed.'
         }
