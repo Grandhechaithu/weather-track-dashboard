@@ -1,48 +1,36 @@
 pipeline {
     agent any
 
-    environment {
-        COMPOSE_FILE = 'docker-compose.yml'
-    }
-
     stages {
-        stage('Clone') {
+        stage('Checkout') {
             steps {
-                echo 'Cloning repository...'
-                checkout scm
+                git 'https://github.com/Grandhechaithu/climatrack-dashboard.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                echo 'Building Docker image...'
                 script {
-                    sh 'docker-compose build'
+                    docker.build('climatrack-dashboard')
                 }
             }
         }
 
-        stage('Run with Docker Compose') {
+        stage('Deploy') {
             steps {
-                echo 'Running app using Docker Compose...'
                 script {
-                    sh 'docker-compose up -d'
+                    docker.image('climatrack-dashboard').run('-p 8089:80')
                 }
-            }
-        }
-
-        stage('Verify Deployment') {
-            steps {
-                echo 'Listing running containers...'
-                sh 'docker ps'
             }
         }
     }
 
     post {
-        always {
-            echo 'Cleaning up...'
-            sh 'docker-compose down'
+        success {
+            echo 'Deployment successful!'
+        }
+        failure {
+            echo 'Deployment failed.'
         }
     }
 }
