@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/Grandhechaithu/climatrack-dashboard.git'
+                git 'https://github.com/Grandhechaithu/weather-track-dashboard.git'
             }
         }
 
