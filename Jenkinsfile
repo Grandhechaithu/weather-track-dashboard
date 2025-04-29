@@ -20,7 +20,7 @@ pipeline {
             steps {
                 echo "Deploying the Docker container..."
                 script {
-                    docker.image('climatrack-dashboard').run('-d -p 8086:80')
+                    docker.image('climatrack-dashboard').run('-d -p 8087:80')
                 }
             }
         }
